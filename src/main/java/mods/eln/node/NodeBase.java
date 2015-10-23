@@ -241,14 +241,16 @@ public abstract class NodeBase {
 				{
 					String str = multiMeterString(side);
 					if (str != null)
-						Utils.addChatMessage(entityPlayer, str);
+						for(String line: str.split("\n"))
+							Utils.addChatMessage(entityPlayer, str);
 					return true;
 				}
 				if (Eln.thermoMeterElement.checkSameItemStack(entityPlayer.getCurrentEquippedItem()))
 				{
 					String str = thermoMeterString(side);
 					if (str != null)
-						Utils.addChatMessage(entityPlayer, str);
+						for(String line: str.split("\n"))
+							Utils.addChatMessage(entityPlayer, line);
 					return true;
 				}
 				if (Eln.allMeterElement.checkSameItemStack(entityPlayer.getCurrentEquippedItem()))
