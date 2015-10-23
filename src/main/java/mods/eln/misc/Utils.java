@@ -227,9 +227,15 @@ public class Utils {
 
 	public static String plotValue(double value, String unit) {
 		double valueAbs = Math.abs(value);
-		if (valueAbs < 0.001) {
+		if (valueAbs < 0.000001) {
 			return "0" + unit;
 			// return String.format("%1.5f", value*1000)+ "m" + unit;
+		} else if (valueAbs < 0.00000999) {
+			return String.format("%1.2f", value * 1000000) + "u" + unit;
+		} else if (valueAbs < 0.0000999) {
+			return String.format("%2.1f", value * 1000000) + "u" + unit;
+		} else if (valueAbs < 0.000999) {
+			return String.format("%3.0f", value * 1000000) + "u" + unit;	
 		} else if (valueAbs < 0.00999) {
 			return String.format("%1.2f", value * 1000) + "m" + unit;
 		} else if (valueAbs < 0.0999) {

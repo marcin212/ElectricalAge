@@ -34,4 +34,10 @@ public enum MaterialResistivity {
 	public double getPerDistance(double diameter, double distance) {
 		return resistivity * distance / ((diameter / 2) * (diameter / 2) * Math.PI);
 	}
+	
+	public double getElectricalNominalPowerDropFactor(double diameter, double P, double U){
+		double I = P/U;
+		double Ploss = getPerBlock(diameter)*I*I;
+		return Ploss/P;
+	}
 }

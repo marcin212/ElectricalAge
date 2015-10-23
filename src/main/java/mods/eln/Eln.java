@@ -11,6 +11,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
+
 import mods.eln.cable.CableRenderDescriptor;
 import mods.eln.client.ClientKeyHandler;
 import mods.eln.client.SoundLoader;
@@ -137,6 +138,7 @@ import mods.eln.transparentnode.turret.TurretDescriptor;
 import mods.eln.transparentnode.waterturbine.WaterTurbineDescriptor;
 import mods.eln.transparentnode.windturbine.WindTurbineDescriptor;
 import mods.eln.wiki.Data;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandManager;
@@ -156,12 +158,14 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import mods.eln.achievepackets.*;
 
 import java.util.*;
@@ -341,6 +345,12 @@ public class Eln {
 	public double electricalFrequancy, thermalFrequancy;
 	public int electricalInterSystemOverSampling;
 
+	
+	
+	public ElectricalCableDescriptor Cable220kVDescriptor;
+	public ElectricalCableDescriptor Cable110kVDescriptor;
+	public ElectricalCableDescriptor Cable10kVDescriptor;
+	
 	public ElectricalCableDescriptor veryHighVoltageCableDescriptor;
 	public ElectricalCableDescriptor highVoltageCableDescriptor;
 	public ElectricalCableDescriptor signalCableDescriptor;
@@ -1063,6 +1073,10 @@ public class Eln {
 	public CableRenderDescriptor stdCableRender200V;
 	public CableRenderDescriptor stdCableRender800V;
 	public CableRenderDescriptor stdCableRender3200V;
+	
+	public CableRenderDescriptor stdCableRender10kV;
+	public CableRenderDescriptor stdCableRender110kV;
+	public CableRenderDescriptor stdCableRender220kV;
 
 	public static double gateOutputCurrent = 0.100;
 	public static final double SVU = 50, SVII = gateOutputCurrent / 50,
@@ -1071,13 +1085,23 @@ public class Eln {
 	public static final double MVU = 200;
 	public static final double HVU = 800;
 	public static final double VVU = 3200;
+	
+	
+	public static final double C10kU = 10000;
+	public static final double C110kU = 110000;
+	public static final double C220kU = 220000;
 
 	public static final double SVP = gateOutputCurrent * SVU;
-	public static final double LVP = 1000;
-	public static final double MVP = 2000;
-	public static final double HVP = 5000;
-	public static final double VVP = 15000;
+	public static final double LVP = 10 * LVU;
+	public static final double MVP = 20 * MVU;
+	public static final double HVP = 43 * HVU;
+	public static final double VVP = 100 * VVU;
 
+	
+	public static final double C10kP = 150 * C10kU;
+	public static final double C110kP = 450 * C110kU;
+	public static final double C220kP = 760 * C220kU;
+	
 	public static double electricalCableDeltaTMax = 20;
 
 	public static final double cableHeatingTime = 30;
@@ -1139,7 +1163,7 @@ public class Eln {
 
 			lowVoltageCableDescriptor = desc;
 
-			desc.setPhysicalConstantLikeNormalCable(LVU, LVP, 0.2 / 20,// electricalNominalVoltage,
+			desc.setPhysicalConstantLikeNormalCable(LVU, LVP, MaterialResistivity.COPPER.getElectricalNominalPowerDropFactor(0.0012, LVP, LVU),// electricalNominalVoltage,
 																		// electricalNominalPower,
 																		// electricalNominalPowerDrop,
 					LVU * 1.3, LVP * 1.2,// electricalMaximalVoltage,
@@ -1183,7 +1207,7 @@ public class Eln {
 
 			meduimVoltageCableDescriptor = desc;
 
-			desc.setPhysicalConstantLikeNormalCable(MVU, MVP, 0.10 / 20,// electricalNominalVoltage,
+			desc.setPhysicalConstantLikeNormalCable(MVU, MVP, MaterialResistivity.COPPER.getElectricalNominalPowerDropFactor(0.002, MVP, MVU),// electricalNominalVoltage,
 																		// electricalNominalPower,
 																		// electricalNominalPowerDrop,
 					MVU * 1.3, MVP * 1.2,// electricalMaximalVoltage,
@@ -1211,7 +1235,7 @@ public class Eln {
 
 			highVoltageCableDescriptor = desc;
 
-			desc.setPhysicalConstantLikeNormalCable(HVU, HVP, 0.025*5/4 / 20,// electricalNominalVoltage,
+			desc.setPhysicalConstantLikeNormalCable(HVU, HVP, MaterialResistivity.COPPER.getElectricalNominalPowerDropFactor(0.004, HVP, HVU),// electricalNominalVoltage,
 																		// electricalNominalPower,
 																		// electricalNominalPowerDrop,
 					HVU * 1.3, HVP * 1.2,// electricalMaximalVoltage,
@@ -1235,14 +1259,14 @@ public class Eln {
 			name = "Very High Voltage Cable";
 
 			stdCableRender3200V = new CableRenderDescriptor("eln",
-					"sprites/cableVHV.png", 3.95f, 1.95f);
+					"sprites/cableVHV.png", 4.95f, 2.95f);
 
 			desc = new ElectricalCableDescriptor(name, stdCableRender3200V,
 					"miaou2", false);
 
 			veryHighVoltageCableDescriptor = desc;
 
-			desc.setPhysicalConstantLikeNormalCable(VVU, VVP, 0.025*5/4 / 20/8,// electricalNominalVoltage,
+			desc.setPhysicalConstantLikeNormalCable(VVU, VVP, MaterialResistivity.COPPER.getElectricalNominalPowerDropFactor(0.006, VVP, VVU),// electricalNominalVoltage,
 																		// electricalNominalPower,
 																		// electricalNominalPowerDrop,
 					VVU * 1.3, VVP * 1.2,// electricalMaximalVoltage,
@@ -1256,6 +1280,100 @@ public class Eln {
 			sixNodeItem.addDescriptor(subId + (id << 6), desc);
 
 		}
+		
+		//10kV
+		{
+			subId = 20;
+
+			// highVoltageCableId = subId;
+			name = "10kV Cable";
+
+			stdCableRender10kV = new CableRenderDescriptor("eln",
+					"sprites/cableVHV.png", 5.95f, 3.95f);
+
+			desc = new ElectricalCableDescriptor(name, stdCableRender10kV,
+					"miaou2", false);
+
+			Cable10kVDescriptor = desc;
+
+			desc.setPhysicalConstantLikeNormalCable(C10kU, C10kP, MaterialResistivity.ALUMINIUM.getElectricalNominalPowerDropFactor(0.008, C10kP, C10kU),// electricalNominalVoltage,
+																		// electricalNominalPower,
+																		// electricalNominalPowerDrop,
+					C10kU * 1.3, C10kP * 1.2,// electricalMaximalVoltage,
+											// electricalMaximalPower,
+					40,// electricalOverVoltageStartPowerLost,
+					cableWarmLimit, -100,// thermalWarmLimit, thermalCoolLimit,
+					cableHeatingTime, cableThermalConductionTao// thermalNominalHeatTime,
+			// thermalConductivityTao
+			);
+
+			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+
+		}
+		
+		
+		//110kV
+		{
+			subId = 24;
+
+			// highVoltageCableId = subId;
+			name = "110kV Cable";
+
+			stdCableRender110kV = new CableRenderDescriptor("eln",
+					"sprites/cableVHV.png", 6.95f, 4.95f);
+
+			desc = new ElectricalCableDescriptor(name, stdCableRender110kV,
+					"miaou2", false);
+
+			Cable110kVDescriptor = desc;
+
+			desc.setPhysicalConstantLikeNormalCable(C110kU, C110kP, MaterialResistivity.IRON.getElectricalNominalPowerDropFactor(0.017, C110kP, C110kU),// electricalNominalVoltage,
+																		// electricalNominalPower,
+																		// electricalNominalPowerDrop,
+					C110kU * 1.3, C110kP * 1.2,// electricalMaximalVoltage,
+											// electricalMaximalPower,
+					40,// electricalOverVoltageStartPowerLost,
+					cableWarmLimit, -100,// thermalWarmLimit, thermalCoolLimit,
+					cableHeatingTime, cableThermalConductionTao// thermalNominalHeatTime,
+			// thermalConductivityTao
+			);
+
+			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+
+		}
+	
+		
+		//220kV
+		{
+			subId = 28;
+
+			// highVoltageCableId = subId;
+			name = "220kV Cable";
+
+			stdCableRender220kV = new CableRenderDescriptor("eln",
+					"sprites/cableVHV.png", 8.95f, 6.95f);
+
+			desc = new ElectricalCableDescriptor(name, stdCableRender220kV,
+					"miaou2", false);
+
+			Cable220kVDescriptor = desc;
+
+			desc.setPhysicalConstantLikeNormalCable(C220kU, C220kP, MaterialResistivity.IRON.getElectricalNominalPowerDropFactor(0.025, C220kP, C220kU),// electricalNominalVoltage,
+																		// electricalNominalPower,
+																		// electricalNominalPowerDrop,
+					C220kU * 1.3, C220kP * 1.2,// electricalMaximalVoltage,
+											// electricalMaximalPower,
+					40,// electricalOverVoltageStartPowerLost,
+					cableWarmLimit, -100,// thermalWarmLimit, thermalCoolLimit,
+					cableHeatingTime, cableThermalConductionTao// thermalNominalHeatTime,
+			// thermalConductivityTao
+			);
+
+			sixNodeItem.addDescriptor(subId + (id << 6), desc);
+
+		}
+		
+		
 	}
 
 	void registerThermalCable(int id) {

@@ -3,6 +3,7 @@ package mods.eln.sixnode.electricalcable;
 import mods.eln.Eln;
 import mods.eln.cable.CableRenderDescriptor;
 import mods.eln.generic.GenericItemBlockUsingDamageDescriptor;
+import mods.eln.misc.MaterialResistivity;
 import mods.eln.misc.Utils;
 import mods.eln.node.NodeBase;
 import mods.eln.node.six.SixNodeDescriptor;
@@ -11,6 +12,7 @@ import mods.eln.sim.ThermalLoad;
 import mods.eln.sim.mna.component.Resistor;
 import mods.eln.sim.mna.misc.MnaConst;
 import mods.eln.wiki.Data;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -143,7 +145,7 @@ public class ElectricalCableDescriptor extends SixNodeDescriptor {
 			list.add("Nominal usage ->");
 			list.add("  Voltage : " + (int)electricalNominalVoltage + "V");
 			list.add(Utils.plotAmpere("  Current :",electricalNominalPower / electricalNominalVoltage));
-			list.add("  Power : " + (int)electricalNominalPower + "W");
+			list.add(Utils.plotPower("  Power : " , electricalNominalPower));
 		//	list.add("  Power lost : " + (int)(electricalNominalPowerDropFactor * electricalNominalPower) + " W/Block");
 			list.add(Utils.plotOhm("Serial resistor :", electricalNominalRs * 2));
 		}
