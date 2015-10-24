@@ -1812,9 +1812,9 @@ public class Eln {
 					name,// int iconId, String name,
 					function,
 					10, // double Imax,
-					1, 10,
+					1, 1000/7.,
 					sixNodeThermalLoadInitializer.copy(),
-					lowVoltageCableDescriptor,
+					veryHighVoltageCableDescriptor,
                     obj.getObj("PowerElectricPrimitives"));
 
 			sixNodeItem.addDescriptor(subId + (id << 6), desc);
@@ -1832,9 +1832,9 @@ public class Eln {
 					name,// int iconId, String name,
 					function,
 					25, // double Imax,
-					1, 25,
+					1, 1000/2.,
 					sixNodeThermalLoadInitializer.copy(),
-					lowVoltageCableDescriptor,
+					meduimVoltageCableDescriptor,
                     obj.getObj("PowerElectricPrimitives"));
 
 			sixNodeItem.addDescriptor(subId + (id << 6), desc);

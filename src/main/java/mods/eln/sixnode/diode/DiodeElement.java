@@ -93,7 +93,7 @@ public class DiodeElement extends SixNodeElement {
 
 	@Override
 	public String multiMeterString() {
-		return Utils.plotVolt("U+:", anodeLoad.getU()) + Utils.plotVolt("U-:", catodeLoad.getU()) + Utils.plotAmpere("I:", anodeLoad.getCurrent());
+		return Utils.plotVolt("U+:", anodeLoad.getU()) + Utils.plotVolt("U-:", catodeLoad.getU()) + Utils.plotAmpere("I:", anodeLoad.getCurrent()) + Utils.plotOhm("Rf:", resistorSwitch.getR());
 	}
 
 	@Override
