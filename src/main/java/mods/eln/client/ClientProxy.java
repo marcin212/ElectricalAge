@@ -3,6 +3,7 @@ package mods.eln.client;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+
 import mods.eln.CommonProxy;
 import mods.eln.Eln;
 import mods.eln.entity.ReplicatorEntity;
@@ -11,9 +12,14 @@ import mods.eln.node.six.SixNodeEntity;
 import mods.eln.node.six.SixNodeRender;
 import mods.eln.node.transparent.TransparentNodeEntity;
 import mods.eln.node.transparent.TransparentNodeRender;
+import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherEntity;
+import mods.eln.simplenode.energyconverter.EnergyConverterElnToOtherRenderer;
 import mods.eln.sixnode.tutorialsign.TutorialSignOverlay;
 import mods.eln.sound.SoundClientEventListener;
+
 import net.minecraft.client.model.ModelSilverfish;
+import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -27,7 +33,13 @@ public class ClientProxy extends CommonProxy {
         new ClientPacketHandler();
         ClientRegistry.bindTileEntitySpecialRenderer(SixNodeEntity.class, new SixNodeRender());
         ClientRegistry.bindTileEntitySpecialRenderer(TransparentNodeEntity.class, new TransparentNodeRender());
-
+        
+        EnergyConverterElnToOtherRenderer energyConverterElnToOtherRenderer = new EnergyConverterElnToOtherRenderer();
+        ClientRegistry.bindTileEntitySpecialRenderer(EnergyConverterElnToOtherEntity.class, energyConverterElnToOtherRenderer);
+        MinecraftForgeClient.registerItemRenderer(new ItemStack(Eln.elnToOtherBlockLvu).getItem(), energyConverterElnToOtherRenderer);
+        MinecraftForgeClient.registerItemRenderer(new ItemStack(Eln.elnToOtherBlockMvu).getItem(), energyConverterElnToOtherRenderer);
+        MinecraftForgeClient.registerItemRenderer(new ItemStack(Eln.elnToOtherBlockHvu).getItem(), energyConverterElnToOtherRenderer);
+        
         MinecraftForgeClient.registerItemRenderer(Eln.transparentNodeItem, Eln.transparentNodeItem);
         MinecraftForgeClient.registerItemRenderer(Eln.sixNodeItem, Eln.sixNodeItem);
         MinecraftForgeClient.registerItemRenderer(Eln.sharedItem, Eln.sharedItem);

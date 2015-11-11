@@ -799,9 +799,9 @@ public class Eln {
 		Utils.println("Electrical age init done");
 	}
 
-	EnergyConverterElnToOtherBlock elnToOtherBlockLvu;
-	EnergyConverterElnToOtherBlock elnToOtherBlockMvu;
-	EnergyConverterElnToOtherBlock elnToOtherBlockHvu;
+	public static EnergyConverterElnToOtherBlock elnToOtherBlockLvu;
+	public static EnergyConverterElnToOtherBlock elnToOtherBlockMvu;
+	public static EnergyConverterElnToOtherBlock elnToOtherBlockHvu;
 
 	private void registerEnergyConverter() {
 		if (ElnToOtherEnergyConverterEnable) {

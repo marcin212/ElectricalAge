@@ -4,12 +4,14 @@ import mods.eln.misc.Direction;
 import mods.eln.node.simple.SimpleNode;
 import mods.eln.node.simple.SimpleNodeBlock;
 import mods.eln.node.simple.SimpleNodeEntity;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,7 +27,17 @@ public class EnergyConverterElnToOtherBlock extends SimpleNodeBlock {
 		this.descriptor = descriptor;
 		setDescriptor(descriptor);
 	}
+	
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new EnergyConverterElnToOtherEntity();
@@ -35,7 +47,14 @@ public class EnergyConverterElnToOtherBlock extends SimpleNodeBlock {
 	protected SimpleNode newNode() {
 		return new EnergyConverterElnToOtherNode();
 	}
-
+	
+	
+	
+	@Override
+	public int getRenderType() {
+	  return -1;
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess w, int x, int y, int z, int side) {
@@ -67,4 +86,6 @@ public class EnergyConverterElnToOtherBlock extends SimpleNodeBlock {
         this.eln2Icon = register.registerIcon("eln:elntoic2lvu_eln2");
         this.sideIcon = register.registerIcon("eln:elntoic2lvu_side");
     }
+    
+    
 }

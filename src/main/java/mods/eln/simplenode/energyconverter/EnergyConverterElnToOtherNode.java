@@ -4,11 +4,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
 import mods.eln.Eln;
 import mods.eln.misc.Direction;
 import mods.eln.misc.LRDU;
+import mods.eln.misc.Utils;
 import mods.eln.node.simple.SimpleNode;
 import mods.eln.sim.ElectricalLoad;
 import mods.eln.sim.IProcess;
@@ -37,6 +41,19 @@ public class EnergyConverterElnToOtherNode extends SimpleNode {
 
     public static final byte setInPowerFactor = 1;
 
+    public LRDU front = LRDU.Left;
+    @Override
+	public boolean onBlockActivated(EntityPlayer entityPlayer, Direction side, float vx, float vy, float vz) {
+		if (Utils.isPlayerUsingWrench(entityPlayer)) {
+			front = front.getNextClockwise();
+			reconnect();
+			setNeedPublish(true);
+			return true;
+		}
+		return super.onBlockActivated(entityPlayer, side, vx, vy, vz);
+    }
+    
+    
     @Override
 	protected void setDescriptorKey(String key) {
 		super.setDescriptorKey(key);
@@ -45,7 +62,7 @@ public class EnergyConverterElnToOtherNode extends SimpleNode {
 	
 	@Override
 	public int getSideConnectionMask(Direction directionA, LRDU lrduA) {
-		if (directionA == getFront()) return maskElectricalPower;
+		if (directionA == getFront() && lrduA.right() == front) return maskElectricalPower;
 		return 0;
 	}
 
@@ -117,6 +134,7 @@ public class EnergyConverterElnToOtherNode extends SimpleNode {
 		super.writeToNBT(nbt);
 		nbt.setDouble("energyBuffer", energyBuffer);
 		nbt.setDouble("inPowerFactor", inPowerFactor);
+		front.writeToNBT(nbt, "lrdu");
 	}
 	
 	@Override
@@ -124,6 +142,7 @@ public class EnergyConverterElnToOtherNode extends SimpleNode {
 		super.readFromNBT(nbt);
 		energyBuffer = nbt.getDouble("energyBuffer");
 		inPowerFactor = nbt.getDouble("inPowerFactor");
+		front = LRDU.readFromNBT(nbt, "lrdu");
 	}
 
 	@Override
@@ -138,6 +157,8 @@ public class EnergyConverterElnToOtherNode extends SimpleNode {
 		try {
 			stream.writeFloat((float) inPowerFactor);
 			stream.writeFloat((float) inPowerMax);
+			front.serialize(stream);
+			stream.writeInt((int)inStdVoltage);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

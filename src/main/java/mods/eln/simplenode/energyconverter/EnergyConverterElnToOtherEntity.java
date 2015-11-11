@@ -10,14 +10,19 @@ import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import mods.eln.Other;
 import mods.eln.misc.Direction;
+import mods.eln.misc.LRDU;
 import mods.eln.node.simple.SimpleNode;
 import mods.eln.node.simple.SimpleNodeEntity;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
 import cofh.api.energy.IEnergyHandler;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,7 +37,7 @@ public class EnergyConverterElnToOtherEntity extends SimpleNodeEntity implements
     float inPowerFactor;
     boolean hasChanges = false;
     public float inPowerMax;
-
+    public int inStdVoltage;
     EnergyConverterElnToOtherFireWallOc oc;
 
     protected boolean addedToEnet;
@@ -53,13 +58,15 @@ public class EnergyConverterElnToOtherEntity extends SimpleNodeEntity implements
 		return new EnergyConverterElnToOtherGui(player, this);
 	}
 
+	public LRDU lrdu = LRDU.Left;
 	@Override
 	public void serverPublishUnserialize(DataInputStream stream) {
 		super.serverPublishUnserialize(stream);
 		try {
 			inPowerFactor = stream.readFloat();
 			inPowerMax = stream.readFloat();
-
+			lrdu = LRDU.deserialize(stream);
+			inStdVoltage = stream.readInt();
 			hasChanges = true;
 		} catch (IOException e) {
 			e.printStackTrace();

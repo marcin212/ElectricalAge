@@ -361,8 +361,7 @@ public enum Direction {
 				GL11.glRotatef(90f, 0f, -1f, 0f);
 				break;
 			case YN:
-				GL11.glRotatef(90f, 1f, 0f, 0f);
-				GL11.glScalef(1f, -1, 1f);
+				GL11.glRotatef(-90f, 1f, 0f, 0f);
 				break;
 			case YP:
 				GL11.glRotatef(90f, 1f, 0f, 0f);
