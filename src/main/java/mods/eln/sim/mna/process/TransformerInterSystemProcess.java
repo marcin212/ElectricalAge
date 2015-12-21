@@ -21,12 +21,26 @@ public class TransformerInterSystemProcess implements IRootSystemPreStepProcess 
 	public void rootSystemPreStepProcess() {
 		Th a = getTh(aState, aVoltgeSource);
 		Th b = getTh(bState, bVoltgeSource);
+
+
+		
 		
 		double aU = (a.U * b.R + ratio * b.U * a.R) / (b.R + ratio * ratio * a.R);
 		if (Double.isNaN(aU)) {
 			aU = 0;
 		}
 		
+	
+		
+		if(a.R == 10000000000000000000.0){
+			
+			aVoltgeSource.setU(aU);
+			bVoltgeSource.setU(0);
+			return;
+
+		}
+		
+
 		aVoltgeSource.setU(aU);
 		bVoltgeSource.setU(aU * ratio);
 	}
@@ -49,10 +63,9 @@ public class TransformerInterSystemProcess implements IRootSystemPreStepProcess 
 
 		double Rth = (aU - bU) / (bI - aI);
 		double Uth;
-		//if (Double.isInfinite(d.Rth)) d.Rth = Double.MAX_VALUE;
-		if (Rth > 10000000000000000000.0 || Rth < 0) {
+		if (Rth > 10000000000000000000.0 || Rth<0){
 			Uth = 0;
-			Rth = Double.POSITIVE_INFINITY;//10000000000000000000.0;
+			Rth = 10000000000000000000.0;
 		} else {
 			Uth = aU + Rth * aI;
 		}
