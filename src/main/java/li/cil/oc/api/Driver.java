@@ -2,7 +2,7 @@ package li.cil.oc.api;
 
 import li.cil.oc.api.driver.Block;
 import li.cil.oc.api.driver.Converter;
-import li.cil.oc.api.driver.EnvironmentHost;
+import li.cil.oc.api.network.EnvironmentHost;
 import li.cil.oc.api.driver.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -19,12 +19,12 @@ import java.util.Collection;
  * needed in that case.
  * <p/>
  * Note that these methods should <em>not</em> be called in the pre-init phase,
- * since the {@link API#driver} may not have been initialized
+ * since the {@link li.cil.oc.api.API#driver} may not have been initialized
  * at that time. Only start calling these methods in the init phase or later.
  *
  * @see Network
- * @see li.cil.oc.api.driver.Block
- * @see li.cil.oc.api.driver.Item
+ * @see Block
+ * @see Item
  */
 public final class Driver {
     /**

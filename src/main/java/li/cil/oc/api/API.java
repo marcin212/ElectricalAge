@@ -1,5 +1,6 @@
 package li.cil.oc.api;
 
+import com.typesafe.config.Config;
 import li.cil.oc.api.detail.*;
 
 /**
@@ -11,11 +12,15 @@ import li.cil.oc.api.detail.*;
  */
 public class API {
     public static final String ID_OWNER = "OpenComputers|Core";
-    public static final String VERSION = "4.2.4";
+    public static final String VERSION = "6.0.0-alpha";
 
     public static DriverAPI driver = null;
     public static FileSystemAPI fileSystem = null;
     public static ItemAPI items = null;
     public static MachineAPI machine = null;
+    public static ManualAPI manual = null;
+    public static NanomachinesAPI nanomachines = null;
     public static NetworkAPI network = null;
+
+    public static Config config = null;
 }

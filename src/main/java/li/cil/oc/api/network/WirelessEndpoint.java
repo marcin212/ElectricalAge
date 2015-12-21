@@ -11,7 +11,7 @@ import net.minecraft.world.World;
  * do (and handle or forward them as they see fit).
  * <p/>
  * If the position of the endpoint can change, it must be updated manually via
- * {@link li.cil.oc.api.Network#updateWirelessNetwork(li.cil.oc.api.network.WirelessEndpoint)}.
+ * {@link li.cil.oc.api.Network#updateWirelessNetwork(WirelessEndpoint)}.
  */
 public interface WirelessEndpoint {
     /**
@@ -37,11 +37,11 @@ public interface WirelessEndpoint {
     /**
      * Makes the endpoint receive a single packet.
      *
-     * @param packet   the packet to receive.
-     * @param sender   the endpoint that sent the message. This is not
-     *                 necessarily the original sender of the packet, just
-     *                 the last point it went through, such as an access
-     *                 point, for example.
+     * @param packet the packet to receive.
+     * @param sender the endpoint that sent the message. This is not
+     *               necessarily the original sender of the packet, just
+     *               the last point it went through, such as an access
+     *               point, for example.
      */
     void receivePacket(Packet packet, WirelessEndpoint sender);
 }
