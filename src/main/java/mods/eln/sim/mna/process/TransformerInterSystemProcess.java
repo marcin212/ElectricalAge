@@ -52,7 +52,7 @@ public class TransformerInterSystemProcess implements IRootSystemPreStepProcess 
 		//if (Double.isInfinite(d.Rth)) d.Rth = Double.MAX_VALUE;
 		if (Rth > 10000000000000000000.0 || Rth < 0) {
 			Uth = 0;
-			Rth = 10000000000000000000.0;
+			Rth = Double.POSITIVE_INFINITY;//10000000000000000000.0;
 		} else {
 			Uth = aU + Rth * aI;
 		}
