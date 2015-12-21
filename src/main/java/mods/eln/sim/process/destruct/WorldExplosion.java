@@ -51,15 +51,22 @@ public class WorldExplosion implements IDestructable {
 	@Override
 	public void destructImpl() {
 		//NodeManager.instance.removeNode(NodeManager.instance.getNodeFromCoordonate(c));
-		
-		if (Eln.instance.explosionEnable)
-			c.world().createExplosion((Entity)null, c.x, c.y, c.z, strength, true);
-		else
-			c.world().setBlock(c.x, c.y, c.z, Blocks.air);
+		if(!c.world().isAirBlock(c.x, c.y, c.z)){
+			if (Eln.instance.explosionEnable)
+				c.world().createExplosion((Entity)null, c.x, c.y, c.z, strength, true);
+			else{
+				c.world().setBlock(c.x, c.y, c.z, Blocks.air);
+			}
+		}
 	}
 
 	@Override
 	public String describe() {
 		return String.format("%s (%s)", this.type, this.c.toString());
+	}
+
+	@Override
+	public Coordonate coords() {
+		return c;
 	}
 }

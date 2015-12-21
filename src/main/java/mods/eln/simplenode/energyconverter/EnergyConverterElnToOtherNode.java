@@ -35,7 +35,6 @@ public class EnergyConverterElnToOtherNode extends SimpleNode {
     public double energyBufferMax;
     public double inStdVoltage;
     public double inPowerMax;
-    //public double otherOutMax = 32;
 
     public double inPowerFactor = 0.5;
 

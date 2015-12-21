@@ -1,6 +1,8 @@
 package mods.eln.sim.process.destruct;
 
 import cpw.mods.fml.common.FMLLog;
+
+import mods.eln.Eln;
 import mods.eln.misc.Utils;
 import mods.eln.sim.IProcess;
 
@@ -41,10 +43,14 @@ public abstract class ValueWatchdog implements IProcess {
 			timeout = timeoutReset;
 		}
 		if (timeout < 0) {
+			if(destructable.coords()!= null && !destructable.coords().world().isAirBlock(destructable.coords().x, destructable.coords().y, destructable.coords().z)){
 			FMLLog.info("%s destroying %s",
 					getClass().getName(),
 					destructable.describe());
 			destructable.destructImpl();
+			}else{
+				Eln.simulator.removeThermalSlowProcess(this);
+			}
 		}
 	}
 	
