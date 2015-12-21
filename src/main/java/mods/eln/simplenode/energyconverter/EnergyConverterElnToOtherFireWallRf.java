@@ -1,7 +1,9 @@
 package mods.eln.simplenode.energyconverter;
 
-import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
+
 import mods.eln.Other;
+
 import net.minecraft.tileentity.TileEntity;
 
 public class EnergyConverterElnToOtherFireWallRf {
@@ -12,8 +14,8 @@ public class EnergyConverterElnToOtherFireWallRf {
 		EnergyConverterElnToOtherNode node = (EnergyConverterElnToOtherNode) e.getNode();
 		TileEntity tileEntity = node.getFront().getInverse().applyToTileEntity(e);
 
-        if(tileEntity == null || !(tileEntity instanceof IEnergyHandler)) return;
-		IEnergyHandler energyHandler = (IEnergyHandler)tileEntity;
+        if(tileEntity == null || !(tileEntity instanceof IEnergyReceiver)) return;
+        IEnergyReceiver energyHandler = (IEnergyReceiver)tileEntity;
 		
 		double pMax = node.getOtherModEnergyBuffer(Other.getElnToTeConversionRatio());
 		node.drawEnergy(energyHandler.receiveEnergy(node.getFront().toForge(), (int) pMax, false), Other.getElnToTeConversionRatio());
