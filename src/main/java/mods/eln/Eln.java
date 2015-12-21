@@ -5203,6 +5203,16 @@ public class Eln {
 				Character.valueOf('E'), findItemStack("Medium Voltage Cable"),
 				Character.valueOf('H'), findItemStack("Copper Thermal Cable"),
 				Character.valueOf('m'), findItemStack("Advanced Electrical Motor"));
+		
+		addRecipe(findItemStack("10kV Turbine"),
+				"ImI",
+				"HMH",
+				"IEI",
+				Character.valueOf('I'), "itemRubber",
+				Character.valueOf('M'), findItemStack("Advanced Machine Block"),
+				Character.valueOf('E'), findItemStack("10kV Cable"),
+				Character.valueOf('H'), findItemStack("Copper Thermal Cable"),
+				Character.valueOf('m'), findItemStack("Advanced Electrical Motor"));
 
 	}
 
