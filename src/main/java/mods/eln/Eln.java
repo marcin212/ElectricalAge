@@ -281,7 +281,8 @@ public class Eln {
 			"FlatScreenMonitor/FlatScreenMonitor.obj",
             "IndustrialPanel/IndustrialPanel.obj",
 			"DistributionBoard/DistributionBoard.obj",
-			"FuelGenerator/FuelGenerator.obj"
+			"FuelGenerator/FuelGenerator.obj",
+			"turbine10kv/turbine10kv.obj"
 			// "/model/BatteryBigHV/BatteryBigHV.obj"
 	};
 
@@ -1320,7 +1321,7 @@ public class Eln {
 			name = "110kV Cable";
 
 			stdCableRender110kV = new CableRenderDescriptor("eln",
-					"sprites/cableVHV.png", 6.95f, 4.95f);
+					"sprites/cableVHV.png", 6.95f, 3.95f);
 
 			desc = new ElectricalCableDescriptor(name, stdCableRender110kV,
 					"miaou2", false);
@@ -1351,7 +1352,7 @@ public class Eln {
 			name = "220kV Cable";
 
 			stdCableRender220kV = new CableRenderDescriptor("eln",
-					"sprites/cableVHV.png", 8.95f, 6.95f);
+					"sprites/cableVHV.png", 8.95f, 3.95f);
 
 			desc = new ElectricalCableDescriptor(name, stdCableRender220kV,
 					"miaou2", false);
@@ -2640,6 +2641,37 @@ public class Eln {
 			transparentNodeItem.addDescriptor(subId + (id << 6), desc);
 		}
 
+		{
+			subId = 16;
+			name = "10kV Turbine";
+			double RsFactor = 0.10;
+			double nominalU = C10kU;
+			double nominalP = 5000*heatTurbinePowerFactor;
+			double nominalDeltaT = 350;
+			TurbineDescriptor desc = new TurbineDescriptor(
+					name,
+					"turbine10kv",
+					"Miaouuuu turbine",// int iconId, String name,String
+										// description,
+					Cable10kVDescriptor.render,
+					TtoU.duplicate(nominalDeltaT, nominalU),
+					PoutToPin.duplicate(nominalP, nominalP), nominalDeltaT,
+					nominalU,
+					nominalP,
+					nominalP / 40,// double nominalDeltaT, double
+									// nominalU,nominalP,double nominalPowerLost
+					nominalU * 1.3,
+					Cable10kVDescriptor.electricalRs * RsFactor,
+					Cable10kVDescriptor.electricalRp,
+					Cable10kVDescriptor.electricalC / RsFactor,// ElectricalCableDescriptor
+																		// electricalCable,
+					50.0, nominalDeltaT / 40, // double thermalC,double
+												// DeltaTForInput
+					nominalP / (nominalU / 25),
+					new SoundCommand("eln:heat_turbine_200v", 2).mulVolume(2));
+			transparentNodeItem.addDescriptor(subId + (id << 6), desc);
+		}
+		
 	}
 
 	/*
