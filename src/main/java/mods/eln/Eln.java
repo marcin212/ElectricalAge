@@ -1408,7 +1408,7 @@ public class Eln {
 
 			ThermalCableDescriptor desc = new ThermalCableDescriptor(name,
 					1000 - 20, -200, // thermalWarmLimit, thermalCoolLimit,
-					500, 2000, // thermalStdT, thermalStdPower,
+					500, 6000, // thermalStdT, thermalStdPower,
 					2, 10, 0.1,// thermalStdDrop, thermalStdLost, thermalTao,
 					new CableRenderDescriptor("eln",
 							"sprites/tex_thermalcablebase.png", 4, 4),
@@ -2556,7 +2556,7 @@ public class Eln {
 			name = "Stone Heat Furnace";
 
 			HeatFurnaceDescriptor desc = new HeatFurnaceDescriptor(name,
-					"stonefurnace", 1000,
+					"stonefurnace", 3000,
 					Utils.getCoalEnergyReference() * 2 / 3,// double
 															// nominalPower,
 															// double
